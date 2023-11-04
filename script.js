@@ -4,27 +4,67 @@
 
 const choices = ["rock", "paper", "scissors"];
 
+let playerScore = document.querySelector("#score #player #pts");
+let computerScore = document.querySelector("#score #computer #pts");
+let gameLogs = document.getElementById("logs");
+let playerScoreCount = 0;
+let computerScoreCount = 0;
+
+let choiceButtons = document.querySelectorAll("#options .btn");
+for (let i = 0; i < choiceButtons.length; i++) {
+    choiceButtons[i].addEventListener("click", () => {
+        game(i);
+    });
+}
+
 function getComputerChoice() {
     return (Math.floor(Math.random() * 3));
 }
 
-function getUserChoice() {
-    return parseInt(prompt("Please choose: \n 0: Rock \n 1: Paper \n 2: Scissors"));
-}
-
 function playRound (playerSelection, computerSelection) {
-    if (computerSelection == playerSelection) return "Draw!!!";
-    else if (computerSelection == (playerSelection + 1) % 3) return "You lost!!!";
-    else return "You won!!!";
+    if (computerSelection == playerSelection) {
+        playerScoreCount++;
+        computerScoreCount++;
+        return "Draw";
+    }
+    else if (computerSelection == (playerSelection + 1) % 3) {
+        computerScoreCount++;
+        return "You lost";
+    }
+    else {
+        playerScoreCount++;
+        return "You won";
+    }
 }
 
-function game() {
-    let playerSelection = getUserChoice();
+function game (playerSelection) {
     let computerSelection = getComputerChoice();
-    console.log(`Your choice was ${choices[playerSelection]} and computer's choice was ${choices[computerSelection]}`);
-    console.log(playRound(playerSelection, computerSelection));
+    let roundReport = document.createElement('div');
+    roundReport.innerHTML = `<p>Your choice was <b> ${choices[playerSelection]} </b> and computer's choice was <b> ${choices[computerSelection]} </b> 
+                         --- <b><i> ${playRound(playerSelection, computerSelection)} </i><b></p>`;
+    gameLogs.prepend(roundReport);
+    playerScore.innerHTML = `${playerScoreCount}`;
+    computerScore.innerHTML = `${computerScoreCount}`;
+    if (playerScoreCount == 5 || computerScoreCount == 5) {
+        endGame();
+        playerScore.innerHTML = `0`;
+        computerScore.innerHTML = `0`;
+    }
 }
 
-for (let i = 0; i < 5; i++) {
-    game();
+function endGame() {
+    let announcement = document.createElement('div');
+    if (playerScoreCount == computerScoreCount) {
+        announcement.setAttribute('id', 'draw');
+        announcement.innerHTML = `<p>So in the end, no one is the winner huh... 😒</p>`;
+    } else if (playerScoreCount > computerScoreCount) {
+        announcement.setAttribute('id', 'win');
+        announcement.innerHTML = `<p>Congratz!!! You are really destined to be the last savior of humanity 😲👏</p>`
+    } else {
+        announcement.setAttribute('id', 'lose');
+        announcement.innerHTML = `<p>What a sorrow day for humanity! The robot once again claims the victory 😭🤖 </p>`
+    }
+    gameLogs.prepend(announcement);
+    playerScoreCount = 0;
+    computerScoreCount = 0;
 }

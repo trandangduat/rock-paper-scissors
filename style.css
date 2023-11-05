@@ -142,3 +142,31 @@ p {
 #score #board #pts {
     font-size: 60px;
 }
+
+#round {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    gap: 20px;
+}
+
+#round .center {
+    flex: 1;
+    font-size: 300px;
+}
+
+#round #player-choice {
+    text-align: right;
+}
+
+#round #player-choice i {
+    color: #529bc6;
+    transform: rotate(90deg);
+}
+
+#round #computer-choice i {
+    color: #ee6e6e;
+    transform: rotate(270deg);
+}
